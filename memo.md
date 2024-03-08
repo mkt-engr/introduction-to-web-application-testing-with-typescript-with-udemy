@@ -85,3 +85,21 @@ mockClear()と mockReset()は、Jest のモック関数に対して使用され�
 
 - `mockReset()`: これは mockClear()の動作に加えて、モック関数の実装もクリアします。つまり、mockImplementation や mockReturnValue で設定された実装も削除されます。
 - `mockRestore()`:jest.spyOn()で作成されたモック関数に対して使用され、モック関数を元の実装に戻します。つまり、スパイを設定する前の状態に戻します。
+
+## モジュール全体のモック化
+
+`fs.readFileSync`とかをモック化したい
+
+```typescript
+//モジュールのパスを引数に渡してfsモジュールをモック化
+jest.mock("fs");
+const mockFs = jest.mocked(fs);
+mockFs.readFileSync.mockReturnValue("test data");
+
+//readFileがデータを返却すること
+it("readFileがデータを返却すること", () => {
+  const data = readFile("path/to/file.txt");
+  expect(data).toBe("test data");
+  expect(fs.readFileSync).toHaveBeenCalledTimes(1);
+});
+```
