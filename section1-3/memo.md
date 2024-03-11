@@ -103,3 +103,70 @@ it("readFileがデータを返却すること", () => {
   expect(fs.readFileSync).toHaveBeenCalledTimes(1);
 });
 ```
+
+# セクション 4
+
+```
+npm i -D jest @types/jest ts-jest
+npm i -D jest-environment-jsdom @testing-library/react @testing-library/jest-dom @testing-library/user-event
+```
+
+テストの初期化
+
+```
+npx ts-jest config:init
+```
+
+jest.config.ts が作成される
+
+vite は ESModule なので jest.config.js にエラーが出る
+
+```ts
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+module.exports = {
+  preset: "ts-jest",
+  testEnvironment: "node",
+};
+```
+
+これを`export default`に変更する
+
+```ts
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+export default {
+  preset: "ts-jest",
+  testEnvironment: "jest-environment-jsdom", // UIのテストを行うため
+};
+```
+
+CommonJS と ESModule の違いによりテスト実行時に警告が出るので
+
+tsconfig.json を書き換える
+
+```json
+{
+  "compilerOptions": {
+    ~~~
+    "esModuleInterop":true
+ }
+}
+```
+
+copilot に聞くとこんな答え
+
+```markdown
+esModuleInterop は TypeScript のコンパイラオプションの一つで、ES モジュールと CommonJS モジュール間の相互運用性を向上させるためのものです。
+
+TypeScript の esModuleInterop オプションを true に設定すると、CommonJS モジュールをデフォルトインポートとして扱うことができます。これは、JavaScript の ES モジュールの構文を使用して CommonJS モジュールをインポートするときに便利です。
+
+例えば、次のような CommonJS モジュールがあるとします。
+
+esModuleInterop が false（または設定されていない）場合、このモジュールをインポートするには次のように書く必要があります。
+
+しかし、esModuleInterop が true に設定されている場合、次のようにデフォルトインポートとして扱うことができます。
+
+import myModule from './myModule';
+このオプションは、JavaScript の ES モジュールと CommonJS モジュール間の互換性を向上させ、より自然なインポート構文を可能にします。
+```
+
+さらに jest.setup.ts を追加
