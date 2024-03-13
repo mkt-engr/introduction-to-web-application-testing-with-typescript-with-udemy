@@ -4,6 +4,12 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof Button> = {
   title: "Button",
   component: Button,
+  argTypes: {
+    label: {
+      options: ["Primaryボタン", "Normalボタン"],
+      control: { type: "select" },
+    },
+  },
 } satisfies Meta<typeof Button>;
 
 export default meta;
@@ -14,6 +20,7 @@ export const Primary: Story = {
   args: {
     label: "Primaryボタン",
     primary: true,
+    onClick: () => console.log("Primaryボタンがクリックされました"),
   },
 };
 
