@@ -34,7 +34,7 @@ export class GroupController {
     } catch (e) {
       next(e);
     }
-  }
+  };
 
   addGroup = (
     req: express.Request,
@@ -60,5 +60,5 @@ export class GroupController {
       }
       next(e);
     }
-  }
+  };
 }
